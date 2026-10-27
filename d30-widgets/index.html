@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D30 Widgets · Bohdan Mykoliuk</title>
+<meta name="description" content="A Unity plugin for iOS and Android home-screen widgets. Lay them out in the editor, change them from C#.">
+<meta property="og:title" content="D30 Widgets">
+<meta property="og:description" content="A Unity plugin for iOS and Android home-screen widgets. Lay them out in the editor, change them from C#.">
+<meta property="og:image" content="https://b-unityassets.github.io/assets/img/og.jpg">
+<link rel="icon" href="/assets/img/avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css?v=6">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/assets/img/avatar.png" alt=""><span>Bohdan Mykoliuk</span></a>
+    <nav>
+      <a href="/d30-widgets/" aria-current="page">D30 Widgets</a>
+      <a href="/help/">Help</a>
+      <a href="https://github.com/b-unityassets">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap split">
+      <div>
+        <h1>D30 Widgets</h1>
+        <p class="lead">A Unity plugin for iOS and Android home-screen widgets. You lay the widget out in an editor
+          window and change it from game code.</p>
+        <p class="lead" style="margin-top:12px">The native side gets generated when you build, so there's no Swift or
+          Kotlin to write.</p>
+        <div class="actions">
+          <span class="btn primary" aria-disabled="true">Asset Store · soon</span>
+          <a class="btn" href="/help/">Help</a>
+        </div>
+      </div>
+      <img class="hero-phone" src="/assets/img/device.jpg" alt="The Energy Meter sample widget on an iPhone home screen" width="900" height="2100">
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="feature">
+        <div class="media"><img src="/assets/img/editor.jpg" alt="The Widget Editor with the Energy Meter sample open" width="1640" height="1120"></div>
+        <div>
+          <h2>What you get</h2>
+          <dl class="defs">
+            <dt>Widget Editor</dt><dd>Images, text, timers, progress bars and PNG-sequence animations, arranged on layers.
+              Preview mode puts the widget on a simulated iPhone or Android home screen.</dd>
+            <dt>Build step</dt><dd>On iOS it adds a WidgetKit extension and an App Group to the Xcode project. On
+              Android it adds the widget resources and a small runtime.</dd>
+            <dt>C# API</dt><dd>You change elements through string keys like <code>Energy/Count</code>. An edit can apply
+              right away or at a set time, and timed ones still land if the game is closed.</dd>
+            <dt>Taps</dt><dd>A tap opens the game, and you get the slot, the widget and a payload you set per element.</dd>
+            <dt>Samples</dt><dd>Six of them, <a href="#samples">see below</a>.</dd>
+            <dt>Docs</dt><dd>Ship inside the package, in <code>Documentation~</code>.</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>The code</h2>
+      <p class="muted">Each key is bound to an element in the editor. This updates the Energy Meter sample:</p>
+<pre class="code"><span class="k">await</span> <span class="t">Widgets</span>.<span class="m">Edit</span>()
+    .<span class="m">SetText</span>(<span class="s">"Energy/Count"</span>, <span class="s">"3 / 5"</span>)
+    .<span class="m">SetProgress</span>(<span class="s">"Energy/Amount"</span>, <span class="n">0.6f</span>)
+    .<span class="m">SetCountdown</span>(<span class="s">"Energy/Full"</span>, fullAt)
+    .<span class="m">Now</span>();
+
+<span class="c">// Shows up at fullAt, whether or not the game is running.</span>
+<span class="k">await</span> <span class="t">Widgets</span>.<span class="m">SetText</span>(<span class="s">"Energy/Status"</span>, <span class="s">"Energy full"</span>).<span class="m">At</span>(fullAt);</pre>
+    </div>
+  </section>
+
+  <section id="setup">
+    <div class="wrap">
+      <h2>Setup</h2>
+      <ol class="steps">
+        <li>Open <b>D30 &gt; Widget Editor</b> and create a widget.</li>
+        <li>Give every element your game will change a <b>key</b>, for example <code>Energy/Count</code>. Static
+          elements don't need one.</li>
+        <li>In <b>Project Settings &gt; D30 &gt; Widgets</b>, tick the widget and add a slot for it.</li>
+        <li>Call <code>Widgets.Edit()</code> from your game.</li>
+        <li>Build. The widget shows up in the home screen's widget picker.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>iOS and Android</h2>
+      <div class="scroll">
+        <table class="table">
+          <thead><tr><th></th><th>iOS</th><th>Android</th></tr></thead>
+          <tbody>
+            <tr><th>Minimum</th><td>iOS 15 (the game itself can support older); Xcode 16</td><td>Android 6.0 (API 23)</td></tr>
+            <tr><th>Sizes</th><td>2×2, 4×2, 4×4, and 4×8 on iPad</td><td>Whatever cell sizes your slots use</td></tr>
+            <tr><th>Scheduled edits</th><td>On time, as WidgetKit timeline entries</td><td>Can run late under Android's power limits</td></tr>
+            <tr><th>Asking the player to add the widget</th><td>iOS has no API for it</td><td>Pin request, Android 8.0+</td></tr>
+            <tr><th>Animation</th><td>First frame only, unless you opt into the experimental loops (iOS 18+)</td><td>Loops</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="margin-top:18px">Needs Unity 6000.3 or newer.</p>
+    </div>
+  </section>
+
+  <section id="samples">
+    <div class="wrap">
+      <h2>Samples</h2>
+      <div class="scroll">
+        <table class="table">
+          <thead><tr><th>Sample</th><th>Size</th><th>What it shows</th></tr></thead>
+          <tbody>
+            <tr><th>Energy Meter</th><td>4×2</td><td>A full-area background and a segmented bar. Refills are scheduled ahead, so the bar fills up while the game is closed</td></tr>
+            <tr><th>Energy Countdown</th><td>2×2</td><td>A timer that ticks without the game, swapped for a label when it hits zero</td></tr>
+            <tr><th>Battle Pass</th><td>4×2</td><td>Tier, XP bar and season countdown</td></tr>
+            <tr><th>Daily Reward</th><td>4×2</td><td>Switching between named images</td></tr>
+            <tr><th>Animated Mascot</th><td>4×2</td><td>A PNG-sequence animation</td></tr>
+            <tr><th>Runtime API</th><td>no widget</td><td>A test screen for every API call</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Bohdan Mykoliuk</span>
+    <span><a href="/">Home</a> · <a href="/help/">Help</a> · <a href="https://github.com/b-unityassets">GitHub</a></span>
+  </div>
+</footer>
+</body>
+</html>

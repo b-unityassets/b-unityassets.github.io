@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Help · Bohdan Mykoliuk</title>
+<meta name="description" content="Common problems with D30 Widgets, and how to reach me.">
+<link rel="icon" href="/assets/img/avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/style.css?v=6">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="/"><img src="/assets/img/avatar.png" alt=""><span>Bohdan Mykoliuk</span></a>
+    <nav>
+      <a href="/d30-widgets/">D30 Widgets</a>
+      <a href="/help/" aria-current="page">Help</a>
+      <a href="https://github.com/b-unityassets">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" style="padding-bottom:48px">
+    <div class="wrap">
+      <h1>Help</h1>
+      <p class="lead">The problems people run into most are below. If yours isn't there, email me.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0; border-top:0">
+    <div class="wrap">
+      <div class="card contact">
+        <div>
+          <p class="mail">bohdan.unityassets@gmail.com</p>
+          <p class="muted">A log or a small repro project usually saves a few rounds of back and forth.</p>
+        </div>
+        <a class="btn primary" href="mailto:bohdan.unityassets@gmail.com">Email</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>D30 Widgets: common problems</h2>
+      <div class="faq">
+        <details>
+          <summary>The widget isn't in the home screen's widget picker</summary>
+          <div>
+            <p>Open <b>Project Settings &gt; D30 &gt; Widgets</b>. The widget has to be ticked under <b>Widgets Included
+              in Build</b>, and there has to be a slot of the same size that uses it as its default.</p>
+            <p>On Android, also check that the Android package is installed. On iOS, the exported Xcode project should
+              have a <code>D30Widgets</code> target. If you build with <b>Append</b>, try a clean export.</p>
+          </div>
+        </details>
+        <details>
+          <summary>iOS: the widget shows up, but changes from the game never reach it</summary>
+          <div>
+            <p>The game and the widget share data through an App Group. Automatic signing sets it up for you. With manual
+              signing you need to create the App Group yourself, plus a provisioning profile for
+              <code>&lt;bundle id&gt;.d30widgets</code> that includes it.</p>
+            <p>Device clouds and other services that re-sign the app drop the App Group, so test this on your own
+              device, TestFlight or an Ad Hoc build.</p>
+          </div>
+        </details>
+        <details>
+          <summary>A call returns <code>UnknownKey</code>, <code>UnknownSlot</code> or <code>UnknownWidget</code></summary>
+          <div><p>The name doesn't match anything in Project Settings. Names are case-sensitive, so <code>energy/count</code>
+            and <code>Energy/Count</code> are different keys.</p></div>
+        </details>
+        <details>
+          <summary>A call returns <code>WrongProperty</code></summary>
+          <div><p>The key belongs to a different kind of element. Calling <code>SetText</code> on an image key does this.</p></div>
+        </details>
+        <details>
+          <summary>The countdown doesn't tick</summary>
+          <div><p>It ticks on iOS 16+ and Android 7.0+. On Android 6 the widget shows the end time instead. On iOS 15 it
+            only updates when the time runs out.</p></div>
+        </details>
+        <details>
+          <summary>Scheduled updates arrive late on Android</summary>
+          <div><p>Android delays alarms to save battery, and on Android 12+ the delay can be a few minutes. If the
+            player force-stops the game, nothing arrives until they open it again. iOS doesn't have this problem.</p></div>
+        </details>
+        <details>
+          <summary>iOS: the animation only shows its first frame</summary>
+          <div><p>That's the default on iOS. Looping animation is an experimental option for iOS 18+ and comes with
+            limits on length and frame rate. The package docs have the details.</p></div>
+        </details>
+        <details>
+          <summary>The Widget Editor shows a <code>D30W…</code> code</summary>
+          <div><p>The editor's <b>Console</b> panel explains it and says what to change. All codes are listed in
+            <code>Documentation~/diagnostics.md</code> inside the package.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Reporting a bug</h2>
+      <p class="muted">Whatever you can include from this list helps:</p>
+      <ul class="checklist">
+        <li>Plugin version and Unity version</li>
+        <li>Platform, OS version and the device</li>
+        <li>What happened, and what you expected instead</li>
+        <li>The Unity Console output, including any <code>D30W…</code> codes</li>
+        <li>For build errors, the build log (and on iOS, whether signing is automatic or manual)</li>
+        <li>The widget asset or a small project where it happens</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Bohdan Mykoliuk</span>
+    <span><a href="/">Home</a> · <a href="/d30-widgets/">D30 Widgets</a> · <a href="https://github.com/b-unityassets">GitHub</a></span>
+  </div>
+</footer>
+</body>
+</html>
